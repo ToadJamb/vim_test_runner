@@ -15,3 +15,14 @@ function TriggerTest()
         echom "Please create a named pipe called `.triggertest` in the current directory"
     endif
 endfunction
+
+function TriggerPreviousTest()
+    let cwd = getcwd()
+    let path = join([cwd, ".triggertest"], "/")
+    if filereadable(path)
+        call writefile([""], path)
+    else
+        echom "Please create a named pipe called `.triggertest` in the current directory"
+    endif
+endfunction
+
