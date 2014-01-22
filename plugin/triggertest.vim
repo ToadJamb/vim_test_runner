@@ -28,7 +28,6 @@ function TriggerTest()
 endfunction
 
 function TriggerPreviousTest()
-  let cwd = getcwd()
   let path = TriggerFilePath()
 
   if filereadable(path)
