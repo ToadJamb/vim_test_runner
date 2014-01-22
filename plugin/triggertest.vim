@@ -26,3 +26,5 @@ function TriggerPreviousTest()
     endif
 endfunction
 
+nmap <silent> <leader>t :call TriggerTest()<CR>
+nmap <silent> <leader>r :call TriggerPreviousTest()<CR>
