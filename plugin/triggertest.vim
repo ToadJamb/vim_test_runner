@@ -1,14 +1,21 @@
 " File:          triggertest.vim
-" Author:        Rit Li
-" Version:       0.1
+" Author:        Travis Herrick
+" Version:       0.2
 " Description:   Send filename and line number to a named pipe
+
+function TriggerFilePath()
+  let home = expand('~')
+  let trigger_file = '.triggertest'
+
+  return join([home, trigger_file], '/')
+endfunction
 
 function TriggerTest()
     let linenum = line('.') 
     let fname = expand('%')
     let args =  join([fname, linenum], " ")
-    let cwd = getcwd()
-    let path = join([cwd, ".triggertest"], "/")
+    let path = TriggerFilePath()
+
     if filereadable(path)
         call writefile([args], path)
     else
@@ -18,7 +25,8 @@ endfunction
 
 function TriggerPreviousTest()
     let cwd = getcwd()
-    let path = join([cwd, ".triggertest"], "/")
+    let path = TriggerFilePath()
+
     if filereadable(path)
         call writefile([""], path)
     else

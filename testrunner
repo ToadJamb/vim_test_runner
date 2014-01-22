@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-input = open('.triggertest', 'r+')
+input = open(File.expand_path('~/.triggertest'), 'r+')
 
 commands = { 'spec' => 'rspec', 'features' => 'cucumber' }
 fname = linenum = command = nil
