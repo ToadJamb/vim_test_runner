@@ -10,17 +10,18 @@ function TriggerFilePath()
   return join([home, trigger_file], '/')
 endfunction
 
-function CreatePipeMessage(path)
-  echom 'Please create a named pipe at ' . path
+let tt:path = TriggerFilePath()
+
+function CreatePipeMessage()
+  echom 'Please create a named pipe at ' . tt:path
 endfunction
 
 function TriggerTest()
   let linenum = line('.') 
   let fname = expand('%')
   let args =  join([fname, linenum], ' ')
-  let path = TriggerFilePath()
 
-  if filereadable(path)
+  if filereadable(tt:path)
     call writefile([args], path)
   else
     call CreatePipeMessage(path)
@@ -28,9 +29,7 @@ function TriggerTest()
 endfunction
 
 function TriggerPreviousTest()
-  let path = TriggerFilePath()
-
-  if filereadable(path)
+  if filereadable(tt:path)
     call writefile([''], path)
   else
     call CreatePipeMessage(path)
