@@ -4,6 +4,9 @@ GEM
     cane (2.6.1)
       parallel
     diff-lcs (1.2.5)
+    metaclass (0.0.2)
+    mocha (1.0.0)
+      metaclass (~> 0.0.1)
     parallel (0.9.2)
     rspec (3.0.0.beta1)
       rspec-core (= 3.0.0.beta1)
@@ -21,4 +24,5 @@ PLATFORMS
 
 DEPENDENCIES
   cane
+  mocha
   rspec (= 3.0.0.beta1)
