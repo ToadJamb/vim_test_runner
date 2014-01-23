@@ -6,10 +6,18 @@ module TestRunner
   end
 
   def self.command(args)
-    if args == ''
-      @command
-    else
+    if valid_args?(args)
       @command = TestRunner::Command.new(args)
+    else
+      @command
     end
+  end
+
+  def self.valid_args?(args)
+    args.match(/^(spec|test|features)\//) &&
+      !args.match(/^spec\/support\//) &&
+      !args.match(/^test\/support\//) &&
+      !args.match(/^features\/step_definitions\//) &&
+      !args.match(/^features\/support\//)
   end
 end
