@@ -1,4 +1,4 @@
-" File:        triggertest.vim
+" File:        test_runner.vim
 " Author:      Travis Herrick
 " Version:     0.2
 " Description: Send filename and line number to a named pipe
