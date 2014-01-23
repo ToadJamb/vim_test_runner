@@ -4,6 +4,6 @@ class TestRunner::Command
   end
 
   def command
-    "bundle exec rspec #{@file} -l #{@line}"
+    "bundle exec rspec #{@file} -l #{@line}" unless @file.empty?
   end
 end

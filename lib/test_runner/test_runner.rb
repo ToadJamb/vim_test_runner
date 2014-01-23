@@ -1,8 +1,8 @@
 module TestRunner
   def self.run
     args = TestRunner::IO.input.gets.strip
-    run_command = command(args).command
-    TestRunner::IO.run run_command
+    run_command = command(args)
+    TestRunner::IO.run run_command.command if run_command
   end
 
   def self.command(args)
