@@ -3,39 +3,39 @@
 " Version:     0.2
 " Description: Send filename and line number to a named pipe
 
-function TriggerFilePath()
+function tt:TriggerFilePath()
   let home = expand('~')
   let trigger_file = '.triggertest'
 
   return join([home, trigger_file], '/')
 endfunction
 
-let s:trigger_test_path = TriggerFilePath()
+let s:trigger_test_path = tt:TriggerFilePath()
 
-function CreatePipeMessage()
+function tt:CreatePipeMessage()
   echom 'Please create a named pipe at ' . s:trigger_test_path
 endfunction
 
-function SendToPipe(args)
+function tt:SendToPipe(args)
   if filereadable(s:trigger_test_path)
     call writefile(a:args, s:trigger_test_path)
   else
-    call CreatePipeMessage()
+    call tt:CreatePipeMessage()
   endif
 endfunction
 
-function TriggerTest()
+function tt:TriggerTest()
   let linenum = line('.')
   let fname   = expand('%')
 
   let args    = [join([fname, linenum], ' ')]
 
-  call SendToPipe(args)
+  call tt:SendToPipe(args)
 endfunction
 
-function TriggerPreviousTest()
-  call SendToPipe([''])
+function tt:TriggerPreviousTest()
+  call tt:SendToPipe([''])
 endfunction
 
-nmap <silent> <leader>t :call TriggerTest()<CR>
-nmap <silent> <leader>r :call TriggerPreviousTest()<CR>
+nmap <silent> <leader>t :call tt:TriggerTest()<CR>
+nmap <silent> <leader>r :call tt:TriggerPreviousTest()<CR>
