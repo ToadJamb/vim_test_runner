@@ -16,24 +16,25 @@ function CreatePipeMessage()
   echom 'Please create a named pipe at ' . s:trigger_test_path
 endfunction
 
-function TriggerTest()
-  let linenum = line('.') 
-  let fname = expand('%')
-  let args =  join([fname, linenum], ' ')
-
+function SendToPipe(args)
   if filereadable(s:trigger_test_path)
-    call writefile([args], s:trigger_test_path)
+    call writefile(a:args, s:trigger_test_path)
   else
     call CreatePipeMessage()
   endif
 endfunction
 
+function TriggerTest()
+  let linenum = line('.')
+  let fname   = expand('%')
+
+  let args    = [join([fname, linenum], ' ')]
+
+  call SendToPipe(args)
+endfunction
+
 function TriggerPreviousTest()
-  if filereadable(s:trigger_test_path)
-    call writefile([''], s:trigger_test_path)
-  else
-    call CreatePipeMessage()
-  endif
+  call SendToPipe([''])
 endfunction
 
 nmap <silent> <leader>t :call TriggerTest()<CR>
