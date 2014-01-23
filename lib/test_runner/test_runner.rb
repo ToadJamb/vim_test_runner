@@ -1,6 +1,20 @@
 module TestRunner
   def self.run
-    args = TestRunner::Input.read.gets
+    args = TestRunner::IO.input.gets.strip
+    run_command = command(args).command
+    TestRunner::IO.run run_command
+  end
+
+  def self.command(args)
+    if args == ''
+      @command
+    else
+      @command = TestRunner::Command.new(args)
+    end
+  end
+
+  def self.run_archive
+    args = TestRunner::IO.input.gets
 
     if args.strip == ''
       args = @previous
