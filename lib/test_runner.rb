@@ -11,7 +11,7 @@ module TestRunner
     commands = { 'spec' => 'rspec', 'features' => 'cucumber' }
     fname = linenum = command = nil
 
-    matched = args.match /^(spec|features)\// 
+    matched = args.match /^(spec|features)\//
     if matched
       unless args =~ /step_definitions/
         fname, linenum = args.split
