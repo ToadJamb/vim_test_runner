@@ -36,6 +36,3 @@ endfunction
 function tt:TriggerPreviousTest()
   call tt:SendToPipe([''])
 endfunction
-
-nmap <silent> <leader>t :call tt:TriggerTest()<CR>
-nmap <silent> <leader>r :call tt:TriggerPreviousTest()<CR>
