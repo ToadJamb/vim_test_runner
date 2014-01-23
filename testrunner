@@ -1,23 +1,7 @@
 #!/usr/bin/env ruby
 
-input = open(File.expand_path('~/.triggertest'), 'r+')
-
-commands = { 'spec' => 'rspec', 'features' => 'cucumber' }
-fname = linenum = command = nil
+require_relative 'lib/test_runner'
 
 loop do
-  args = input.gets
-  matched = args.match /^(spec|features)\// 
-  if matched
-    unless args =~ /step_definitions/
-      fname, linenum = args.split
-      command = commands[matched[1]]
-    end
-  end
-
-  if fname
-    cmd = "bundle exec #{command} #{fname} -l #{linenum}"
-    puts cmd
-    system cmd
-  end
+  TestRunner::run
 end
