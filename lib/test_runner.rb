@@ -9,7 +9,6 @@ module TestRunner
     end
 
     commands = { 'spec' => 'rspec', 'features' => 'cucumber' }
-    fname = linenum = command = nil
 
     matched = args.match /^(spec|features)\//
     if matched
