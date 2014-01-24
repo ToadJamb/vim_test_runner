@@ -14,10 +14,6 @@ module TestRunner
   end
 
   def self.valid_args?(args)
-    args.match(/^(spec|test|features)\//) &&
-      !args.match(/^spec\/support\//) &&
-      !args.match(/^test\/support\//) &&
-      !args.match(/^features\/step_definitions\//) &&
-      !args.match(/^features\/support\//)
+    !args.empty?
   end
 end

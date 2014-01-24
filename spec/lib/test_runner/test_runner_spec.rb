@@ -4,7 +4,7 @@ describe TestRunner do
   let(:valid_args) { "#{file} #{line}\n" }
   let(:args)       { valid_args }
   let(:file)       { "#{path}/file.rb" }
-  let(:line)       { 23 }
+  let(:line)       { rand(999) + 2 }
   let(:path)       { ['spec', 'test', 'features'].sample }
 
   before { TestRunner::IO.stubs :read_yaml => {} }
@@ -25,36 +25,9 @@ describe TestRunner do
     end
 
     context 'given no arguments' do
-      let(:args) { '' }
+      let(:args) { "\n" }
 
-      before { expect(args).to be_empty }
-
-      context 'given it is the first run' do
-        before { TestRunner.instance_variable_set :@command, nil }
-        before { TestRunner::IO.unstub :run }
-        before { TestRunner::IO.expects(:run).never }
-
-        it 'does not invoke run' do
-          described_class.run
-        end
-      end
-
-      context 'given a previous run with valid arguments' do
-        let(:command_object) { TestRunner::Command.new valid_args }
-
-        before { TestRunner.instance_variable_set :@command, command_object }
-
-        it 'runs the previous command' do
-          TestRunner::IO.expects(:run).with command
-          described_class.run
-        end
-      end
-    end
-
-    context 'given a file in an unsupported location' do
-      let(:file) { 'foo/bar.rb' }
-
-      before { expect(args).to_not match(/^(spec|test|features)\//) }
+      before { expect(args).to eq "\n" }
 
       context 'given it is the first run' do
         before { TestRunner.instance_variable_set :@command, nil }
@@ -82,29 +55,43 @@ describe TestRunner do
   describe '.command' do
     subject { described_class.command args }
 
-    before { TestRunner.instance_variable_set :@command, nil }
+    context 'given the first call' do
+      before { TestRunner.instance_variable_set :@command, nil }
 
-    context 'given valid arguments' do
-      before { expect(args).to match(/^(spec|test|features)\//) }
-      it 'returns a command object' do
-        expect(subject).to be_a TestRunner::Command
+      context 'given valid arguments' do
+        before { expect(args).to_not be_empty }
+        it 'returns a command object' do
+          expect(subject).to be_a TestRunner::Command
+        end
+      end
+
+      context 'given invalid arguments' do
+        let(:args) { '' }
+        before { expect(args).to be_empty }
+        it 'returns nil' do
+          expect(subject).to eq nil
+        end
       end
     end
 
-    context 'given a valid root path' do
-      before { expect(args).to match(/^(spec|test|features)\//) }
-      context 'given invalid sub-path' do
-        let(:path) {[
-          'spec/support',
-          'test/support',
-          'features/step_definitions',
-          'features/support',
-        ].sample}
+    context 'given a previous call' do
+      let(:command_object) { TestRunner::Command.new valid_args }
 
-        before { expect(args).to match(/^#{path}/) }
+      before { TestRunner.instance_variable_set :@command, command_object }
 
-        it 'returns a command object' do
-          expect(subject).to eq nil
+      context 'given valid arguments' do
+        before { expect(args).to_not be_empty }
+        it 'returns a new command object' do
+          expect(subject).to be_a TestRunner::Command
+          expect(subject).to_not eq command_object
+        end
+      end
+
+      context 'given invalid arguments' do
+        let(:args) { '' }
+        before { expect(args).to be_empty }
+        it 'returns the previous command object' do
+          expect(subject).to eq command_object
         end
       end
     end
@@ -113,62 +100,14 @@ describe TestRunner do
   describe '.valid_args?' do
     subject { described_class.valid_args? args }
 
-    context 'given a file in the spec folder' do
-      let(:path) { 'spec' }
-
-      before { expect(args).to match(/^spec\//) }
-
-      context 'by default' do
-        before { expect(args).to_not match(/^spec\/support\//) }
-        it('returns true') { expect(subject).to eq true }
-      end
-
-      context 'given a file in the support subfolder' do
-        let(:path) { 'spec/support' }
-        before { expect(args).to match(/^spec\/support\//) }
-        it('returns false') { expect(subject).to eq false }
-      end
+    context 'given args' do
+      let(:args) { 'foo' }
+      it('returns true') { expect(subject).to eq true }
     end
 
-    context 'given a file in the test folder' do
-      let(:path) { 'test' }
-
-      before { expect(args).to match(/^test\//) }
-
-      context 'by default' do
-        before { expect(args).to_not match(/^test\/support\//) }
-        it('returns true') { expect(subject).to eq true }
-      end
-
-      context 'given a file in the support subfolder' do
-        let(:path) { 'test/support' }
-        before { expect(args).to match(/^test\/support\//) }
-        it('returns false') { expect(subject).to eq false }
-      end
-    end
-
-    context 'given a file in the features folder' do
-      let(:path) { 'features' }
-
-      before { expect(args).to match(/^features\//) }
-
-      context 'by default' do
-        before { expect(args).to_not match(/^features\/support\//) }
-        before { expect(args).to_not match(/^features\/step_definitions\//) }
-        it('returns true') { expect(subject).to eq true }
-      end
-
-      context 'given a file in the support subfolder' do
-        let(:path) { 'features/support' }
-        before { expect(args).to match(/^features\/support\//) }
-        it('returns false') { expect(subject).to eq false }
-      end
-
-      context 'given a file in the step_definitions subfolder' do
-        let(:path) { 'features/step_definitions' }
-        before { expect(args).to match(/^features\/step_definitions\//) }
-        it('returns false') { expect(subject).to eq false }
-      end
+    context 'given no args' do
+      let(:args) { '' }
+      it('returns false') { expect(subject).to eq false }
     end
   end
 end
