@@ -9,7 +9,7 @@ describe TestRunner::IO do
     before { described_class.unstub :input }
 
     context 'given the first call' do
-      before { TestRunner::IO.instance_variable_set :@file, nil }
+      before { described_class.instance_variable_set :@file, nil }
 
       it 'delegates to open' do
         Kernel.expects(:open)
@@ -21,7 +21,7 @@ describe TestRunner::IO do
     end
 
     context 'given the second call' do
-      before { TestRunner::IO.instance_variable_set :@file, mock_input }
+      before { described_class.instance_variable_set :@file, mock_input }
 
       it 'returns the previous file handle' do
         Kernel.expects(:open).never
