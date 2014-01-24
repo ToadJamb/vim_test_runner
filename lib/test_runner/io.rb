@@ -15,10 +15,14 @@ class TestRunner::IO
       yaml_file = yaml_path
 
       if yaml_file
-        @yaml = Psych.load_file(yaml_file)
+        @yaml = load_yaml(yaml_file)
       else
         @yaml = {}
       end
+    end
+
+    def load_yaml(path)
+      Psych.load_file path
     end
 
     def file?(*args)

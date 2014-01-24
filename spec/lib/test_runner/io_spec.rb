@@ -43,6 +43,96 @@ describe TestRunner::IO do
     end
   end
 
+  describe '.read_yaml' do
+    subject { described_class.read_yaml }
+
+    before { described_class.unstub :read_yaml }
+
+    context 'given the first invocation' do
+      let(:work_path) { '.test_runner.yaml' }
+      let(:home_path) { File.expand_path "~/.#{root}.test_runner.yaml" }
+      let(:root)      { 'project_name' }
+      let(:work_yaml) {{ :work => true }}
+      let(:home_yaml) {{ :home => true }}
+
+      before { described_class.instance_variable_set :@yaml, nil }
+      before { described_class.unstub :load_yaml }
+      before { described_class.unstub :file? }
+      before { described_class.stubs :root => root }
+
+      before do
+        described_class.stubs(:load_yaml).with(work_path).returns work_yaml
+        described_class.stubs(:load_yaml).with(home_path).returns home_yaml
+      end
+
+      context 'given a yaml file in the working folder' do
+        before { described_class.stubs(:file?).with(work_path).returns true }
+
+        context 'given a yaml file in the home folder' do
+          before do
+            described_class.stubs(:file?).with(home_path).returns true
+          end
+
+          it 'loads the working folder yaml file' do
+            expect(subject).to eq work_yaml
+          end
+        end
+
+        context 'given no yaml file in the home folder' do
+          before do
+            described_class.stubs(:file?).with(home_path).returns false
+          end
+
+          it 'loads the working folder yaml file' do
+            expect(subject).to eq work_yaml
+          end
+        end
+      end
+
+      context 'given no yaml file in the working folder' do
+        before { described_class.stubs(:file?).with(work_path).returns false }
+
+        context 'given a yaml file in the home folder' do
+          before do
+            described_class.stubs(:file?).with(home_path).returns true
+          end
+
+          it 'loads the home folder yaml file' do
+            expect(subject).to eq home_yaml
+          end
+        end
+
+        context 'given no yaml file in the home folder' do
+          before do
+            described_class.stubs(:file?).with(home_path).returns false
+          end
+
+          it 'returns an empty hash' do
+            expect(subject).to eq({})
+          end
+        end
+      end
+    end
+
+    context 'given it has been invoked previously' do
+      let(:hash) {{:round2 => true}}
+      before { described_class.instance_variable_set :@yaml, hash }
+      it 'returns the previous value' do
+        expect(subject).to eq hash
+      end
+    end
+  end
+
+  describe '.load_yaml' do
+    subject { described_class.load_yaml yaml_path }
+    let(:yaml_path) { '/root/path' }
+    before { described_class.unstub :load_yaml }
+    it "calls #{Psych}.load_file" do
+      Psych.expects(:load_file).with(yaml_path).returns({:foo => :bar})
+      expect(subject).to eq({:foo => :bar})
+    end
+  end
+
   describe '.file?' do
     subject { described_class.file?(*args) }
 
