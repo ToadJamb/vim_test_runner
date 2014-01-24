@@ -7,6 +7,8 @@ describe TestRunner do
   let(:line)       { 23 }
   let(:path)       { ['spec', 'test', 'features'].sample }
 
+  before { TestRunner::IO.stubs :read_yaml => {} }
+
   describe '.run' do
     let(:mock_input) { mock 'IO.input' }
     let(:command)    { "bundle exec rspec #{file} -l #{line}" }
