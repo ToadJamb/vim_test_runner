@@ -42,4 +42,21 @@ describe TestRunner::IO do
       subject
     end
   end
+
+  describe '.file?' do
+    subject { described_class.file?(*args) }
+
+    let(:args) {[
+      [],
+      ['1'],
+      ['1', '2'],
+      ['1', '2', '3'],
+      ['1', '2', '3', '4'],
+    ].sample}
+
+    it "delegates to #{File}.file?" do
+      described_class.expects(:file?).with(*args).returns 'woot'
+      expect(subject).to eq 'woot'
+    end
+  end
 end
