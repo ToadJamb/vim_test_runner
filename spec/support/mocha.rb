@@ -1,3 +1,5 @@
+Mocha::Configuration.prevent(:stubbing_non_existent_method)
+
 # Couldn't get this to work by including a module.
 class Mocha::Mockery
   alias_method :orig_satisfied_expectations, :satisfied_expectations
