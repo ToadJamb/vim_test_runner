@@ -50,12 +50,7 @@ describe TestRunner::IO do
     end
 
     context 'given the second call' do
-      before { described_class.instance_variable_set :@file, 'cached-file' }
-
-      it 'returns the previous file handle' do
-        Kernel.expects(:open).never
-        expect(subject).to eq 'cached-file'
-      end
+      it_behaves_like 'a cached value for', System, :open_file, :input, :file
     end
 
     shared_examples_for 'an open pipe for' do |type|
@@ -242,11 +237,8 @@ describe TestRunner::IO do
     end
 
     context 'given it has been invoked previously' do
-      let(:hash) {{:round2 => true}}
-      before { described_class.instance_variable_set :@yaml, hash }
-      it 'returns the previous value' do
-        expect(subject).to eq hash
-      end
+      it_behaves_like 'a cached value for',
+        System, :load_yaml, :read_yaml, :yaml
     end
   end
 end

@@ -39,22 +39,6 @@ describe TestRunner::System do
     end
   end
 
-  shared_examples_for 'a cached value for' do |klass, method, delegate|
-    subject { described_class.send delegate }
-
-    let(:cache) { 'cached-value' }
-
-    before do
-      delegate ||= method
-      described_class.instance_variable_set "@#{delegate}".to_sym, cache
-    end
-
-    it "#{klass}.#{method}" do
-      klass.expects(method).never
-      expect(subject).to eq cache
-    end
-  end
-
   describe('.system')  { it_behaves_like 'a delegate to', Kernel, :system }
   describe('.file?')   { it_behaves_like 'a delegate to', File, :file? }
   describe('.exists?') { it_behaves_like 'a delegate to', File, :exists? }
