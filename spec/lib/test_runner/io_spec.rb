@@ -149,8 +149,9 @@ describe TestRunner::IO do
             expect(System.exists?(project_pipe)).to eq false
           end
 
-          it 'shows the user some useful information about creating a pipe' do
-            subject
+          it 'raises and shows the useful information about creating a pipe' do
+            expect{ subject }
+              .to raise_error TestRunner::NamedPipeNotFoundException
             expect(@out.string).to match('Please create a named pipe')
           end
         end

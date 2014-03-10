@@ -2,8 +2,10 @@ module TestRunner
   class IO
     PIPE_NAME = '.test_runner'
     HELP_MASK = "Please create a named pipe " +
-      "at one of the following locations:\n" +
-      "%s\n%s\n%s\n"
+      "at one of the following locations:\n\n" +
+      "%s\n%s\n%s\n\n" +
+      "see https://www.bitbucket.org/toadjamb/vim_test_runner " +
+      "for additional information\n\n"
 
     class << self
       def input
@@ -15,7 +17,7 @@ module TestRunner
           when System.exists?(pipes[:global]) then pipes[:global]
           else
             puts HELP_MASK % pipes.values
-            return
+            raise NamedPipeNotFoundException
           end
 
         puts "Listening for input from #{pipe}"
