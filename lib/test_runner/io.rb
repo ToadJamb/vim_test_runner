@@ -23,8 +23,9 @@ module TestRunner
         @file = System.open_file(pipe, 'r+')
       end
 
-      def run(command, suppress_output = false)
-        puts command unless suppress_output
+      def run(command)
+        puts '*' * 80
+        puts command
         System.system command
       end
 

@@ -2,12 +2,20 @@ require 'spec_helper'
 
 describe TestRunner::IO do
   System = TestRunner::System
+
   let(:home)        { '/home/path' }
   let(:root)        { 'project_root' }
   let(:pipe_suffix) { '.test_runner' }
 
   before { System.stubs :home => home }
   before { System.unstub :file_join }
+
+  around do |example|
+    @out = StringIO.new
+    $stdout = @out
+    example.run
+    $stdout = STDOUT
+  end
 
   describe '.input' do
     subject { described_class.input }
@@ -28,13 +36,6 @@ describe TestRunner::IO do
     before { System.stubs :exists? => true }
 
     before { described_class.instance_variable_set :@file, nil }
-
-    around do |example|
-      @out = StringIO.new
-      $stdout = @out
-      example.run
-      $stdout = STDOUT
-    end
 
     context 'given the first call' do
       before { described_class.instance_variable_set :@file, nil }
@@ -158,7 +159,7 @@ describe TestRunner::IO do
   end
 
   describe '.run' do
-    subject { described_class.run command, true }
+    subject { described_class.run command }
 
     let(:command) { 'some_command' }
 
