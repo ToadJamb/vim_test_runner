@@ -1,7 +1,25 @@
 class TestRunner::IO
+  PIPE_NAME = '.test_runner'
+  HELP_MASK = "Please create a named pipe " +
+    "at one of the following locations:\n" +
+    "%s\n%s\n%s\n"
+
   class << self
     def input
-      @file ||= Kernel.open(File.join(home, '.triggertest'), 'r+')
+      return @file if @file
+
+      pipe = case true
+        when file?(pipes[:project]) then pipes[:project]
+        when file?(pipes[:local]) then pipes[:local]
+        when file?(pipes[:global]) then pipes[:global]
+        else
+          puts HELP_MASK % pipes.values
+          return
+        end
+
+      puts "Listening for input from #{pipe}"
+
+      @file = Kernel.open(pipe, 'r+')
     end
 
     def run(command, suppress_output = false)
@@ -26,7 +44,15 @@ class TestRunner::IO
     end
 
     def file?(*args)
-      File.file?(*args)
+      File.exists?(*args)
+    end
+
+    def home
+      File.expand_path '~'
+    end
+
+    def pwd
+      Dir.getwd
     end
 
     private
@@ -42,12 +68,16 @@ class TestRunner::IO
       end
     end
 
-    def home
-      File.expand_path '~'
+    def root
+      File.basename pwd
     end
 
-    def root
-      File.basename Dir.getwd
+    def pipes
+      {
+        :global  => File.join(home, PIPE_NAME),
+        :local   => File.join(pwd, PIPE_NAME),
+        :project => File.join(home, ".#{root}#{PIPE_NAME}"),
+      }
     end
   end
 end
