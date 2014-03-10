@@ -41,11 +41,18 @@ Add the following to your .vimrc to add a keybinding using a custom vim command:
 Usage
 -----
 
-Create a named pipe (`.triggertest`) in your home folder:
+Create a named pipe:
 
-		$ mkfifo ~/.triggertest
+		$ mkfifo [file_path]
 
-From your project root, run the testrunner using Ruby:
+`file_path` may be any one of the following
+(in order of significance to test runner):
+
+1. ~/.[project root folder].test_runner
+2. [project path]/.test_runner
+3. ~/.test_runner
+
+From your project root, run the test runner using Ruby:
 
 		$ ruby ~/.vim/bundle/vim_test_runner/test_runner
 

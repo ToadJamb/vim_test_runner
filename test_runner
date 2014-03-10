@@ -3,5 +3,9 @@
 require_relative 'lib/test_runner'
 
 loop do
-  TestRunner::run
+  begin
+    TestRunner::run
+  rescue TestRunner::NamedPipeNotFoundException
+    break
+  end
 end

@@ -1,53 +1,69 @@
-class TestRunner::IO
-  class << self
-    def input
-      @file ||= Kernel.open(File.join(home, '.triggertest'), 'r+')
-    end
+module TestRunner
+  class IO
+    PIPE_NAME = '.test_runner'
+    HELP_MASK = "Please create a named pipe " +
+      "at one of the following locations:\n\n" +
+      "%s\n%s\n%s\n\n" +
+      "see https://www.bitbucket.org/toadjamb/vim_test_runner " +
+      "for additional information\n\n"
 
-    def run(command, suppress_output = false)
-      puts command unless suppress_output
-      Kernel.system command
-    end
+    class << self
+      def input
+        return @file if @file
 
-    def read_yaml
-      return @yaml if @yaml
+        pipe = case true
+          when System.exists?(pipes[:project]) then pipes[:project]
+          when System.exists?(pipes[:local]) then pipes[:local]
+          when System.exists?(pipes[:global]) then pipes[:global]
+          else
+            puts HELP_MASK % pipes.values
+            raise NamedPipeNotFoundException
+          end
 
-      yaml_file = yaml_path
+        puts "Listening for input from #{pipe}"
 
-      if yaml_file
-        @yaml = load_yaml(yaml_file)
-      else
-        @yaml = {}
+        @file = System.open_file(pipe, 'r+')
       end
-    end
 
-    def load_yaml(path)
-      Psych.load_file path
-    end
-
-    def file?(*args)
-      File.file?(*args)
-    end
-
-    private
-
-    def yaml_path
-      default_yaml = '.test_runner.yaml'
-      home_yaml = File.join(home, ".#{root}#{default_yaml}")
-
-      if file?(default_yaml)
-        default_yaml
-      elsif file?(home_yaml)
-        home_yaml
+      def run(command)
+        puts '*' * 80
+        puts command
+        System.system command
       end
-    end
 
-    def home
-      File.expand_path '~'
-    end
+      def read_yaml
+        return @yaml if @yaml
 
-    def root
-      File.basename Dir.getwd
+        yaml_file = yaml_path
+
+        if yaml_file
+          @yaml = System.load_yaml(yaml_file)
+        else
+          @yaml = {}
+        end
+      end
+
+      private
+
+      def yaml_path
+        default_yaml = '.test_runner.yaml'
+        home_yaml = System.file_join(
+          System.home, ".#{System.root}#{default_yaml}")
+
+        if System.file?(default_yaml)
+          default_yaml
+        elsif System.file?(home_yaml)
+          home_yaml
+        end
+      end
+
+      def pipes
+        {
+          :global  => File.join(System.home, PIPE_NAME),
+          :local   => File.join(System.pwd, PIPE_NAME),
+          :project => File.join(System.home, ".#{System.root}#{PIPE_NAME}"),
+        }
+      end
     end
   end
 end
