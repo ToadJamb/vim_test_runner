@@ -3,7 +3,7 @@
 " Version:     0.3
 " Description: Send filename and line number to a named pipe
 
-function tt:TriggerFilePath()
+function! l:TriggerFilePath()
   let home = expand('~')
   let pipe_name = '.test_runner'
 
@@ -31,29 +31,29 @@ function tt:TriggerFilePath()
   return named_pipe
 endfunction
 
-let s:trigger_test_path = tt:TriggerFilePath()
+let s:trigger_test_path = l:TriggerFilePath()
 
-function tt:CreatePipeMessage()
+function! l:CreatePipeMessage()
   echom 'Please create a named pipe at ' . s:trigger_test_path
 endfunction
 
-function tt:SendToPipe(args)
+function! l:SendToPipe(args)
   if filereadable(s:trigger_test_path)
     call writefile(a:args, s:trigger_test_path)
   else
-    call tt:CreatePipeMessage()
+    call l:CreatePipeMessage()
   endif
 endfunction
 
-function tt:TriggerTest()
+function! tt:TriggerTest()
   let linenum = line('.')
   let fname   = expand('%')
 
   let args    = [join([fname, linenum], ' ')]
 
-  call tt:SendToPipe(args)
+  call l:SendToPipe(args)
 endfunction
 
-function tt:TriggerPreviousTest()
-  call tt:SendToPipe([''])
+function! tt:TriggerPreviousTest()
+  call l:SendToPipe([''])
 endfunction
