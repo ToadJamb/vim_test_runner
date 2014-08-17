@@ -28,14 +28,14 @@ KeyBindings
 
 Add the following to your .vimrc to add a keybinding using your leader key:
 
-		map <silent> <leader>t :call tt:TriggerTest()<CR>
-		map <silent> <leader>r :call tt:TriggerPreviousTest()<CR>
+		map <silent> <leader>t :call vim_test_runner:TriggerTest()<CR>
+		map <silent> <leader>r :call vim_test_runner:TriggerPreviousTest()<CR>
 
 
 Add the following to your .vimrc to add a keybinding using a custom vim command:
 
-		command tt :execute tt:TriggerTest()
-		command tr :execute tt:TriggerPreviousTest()
+		command tt :execute vim_test_runner:TriggerTest()
+		command tr :execute vim_test_runner:TriggerPreviousTest()
 
 
 Usage

@@ -45,7 +45,7 @@ function! l:SendToPipe(args)
   endif
 endfunction
 
-function! tt:TriggerTest()
+function! vim_test_runner:TriggerTest()
   let linenum = line('.')
   let fname   = expand('%')
 
@@ -54,6 +54,21 @@ function! tt:TriggerTest()
   call l:SendToPipe(args)
 endfunction
 
-function! tt:TriggerPreviousTest()
+function! vim_test_runner:TriggerPreviousTest()
   call l:SendToPipe([''])
+endfunction
+
+function! tt:TriggerTest()
+  let message = 'tt:TriggerTest() is being deprecated. '
+  let message = message . 'Please use vim_test_runner:TriggerTest() instead.'
+  echoerr message
+  call vim_test_runner:TriggerTest()
+endfunction
+
+function! tt:TriggerPreviousTest()
+  let message = 'tt:TriggerPreviousTest() is being deprecated. '
+  let message = message .'Please use '
+  let message = message .'vim_test_runner:TriggerPreviousTest() instead.'
+  echoerr message
+  call vim_test_runner:TriggerPreviousTest()
 endfunction
