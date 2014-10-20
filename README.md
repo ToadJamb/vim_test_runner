@@ -28,14 +28,14 @@ KeyBindings
 
 Add the following to your .vimrc to add a keybinding using your leader key:
 
-		map <silent> <leader>t :call vim_test_runner:TriggerTest()<CR>
-		map <silent> <leader>r :call vim_test_runner:TriggerPreviousTest()<CR>
+		map <silent> <leader>t :call TriggerTest()<CR>
+		map <silent> <leader>r :call TriggerPreviousTest()<CR>
 
 
 Add the following to your .vimrc to add a keybinding using a custom vim command:
 
-		command tt :execute vim_test_runner:TriggerTest()
-		command tr :execute vim_test_runner:TriggerPreviousTest()
+		command tt :execute TriggerTest()
+		command tr :execute TriggerPreviousTest()
 
 
 Usage
@@ -64,6 +64,20 @@ and hit `<leader>t` again to tell TestRunner to run the new test.
 
 Running a file on line one will exclude the line number, thereby running all
 specs in the file.
+
+
+### Normal files
+
+vim_test_runner will work with normal files, as well,
+but they are not as robust and should only be used when named pipes
+are not available (i.e. on windows platforms).
+
+Normal files follow the same naming conventions as named pipes.
+
+The biggest drawback is that the file is overwritten every time
+parameters are read from it. This means that commands will not 'stack'
+as they will with named pipes. At best, you can queue up one more comand.
+The first one in will be the one that is kept.
 
 
 Configuration
