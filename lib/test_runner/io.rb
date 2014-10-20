@@ -11,18 +11,13 @@ module TestRunner
       def input
         return @file if @file
 
-        pipe = case true
-          when System.exists?(pipes[:project]) then pipes[:project]
-          when System.exists?(pipes[:local]) then pipes[:local]
-          when System.exists?(pipes[:global]) then pipes[:global]
-          else
-            puts HELP_MASK % pipes.values
-            raise NamedPipeNotFoundException
-          end
+        listening
 
-        puts "Listening for input from #{pipe}"
-
-        @file = System.open_file(pipe, 'r+')
+        if pipe?
+          pipe_input
+        else
+          file_input
+        end
       end
 
       def run(command)
@@ -43,6 +38,41 @@ module TestRunner
         end
       end
 
+      # These are thought of as private, but tested directly.
+      # Perhaps move them to a different interface?
+
+      def pipe
+        @pipe ||= case true
+          when System.exists?(pipes[:project]) then pipes[:project]
+          when System.exists?(pipes[:local]) then pipes[:local]
+          when System.exists?(pipes[:global]) then pipes[:global]
+          else
+            puts HELP_MASK % pipes.values
+            raise NamedPipeNotFoundException
+          end
+      end
+
+      def listening
+        return if @notified
+        puts "Listening for input from #{pipe}"
+        @notified = true
+      end
+
+      def pipe?
+        return @is_pipe unless @is_pipe.nil?
+        @is_pipe = System.pipe?(pipe)
+      end
+
+      def pipe_input
+        @file ||= System.open_file(pipe, 'r+')
+      end
+
+      def file_input
+        out = System.read_file(pipe)
+        System.write_file(pipe, '') unless out.empty?
+        StringIO.new out
+      end
+
       private
 
       def yaml_path
@@ -59,9 +89,12 @@ module TestRunner
 
       def pipes
         {
-          :global  => File.join(System.home, PIPE_NAME),
-          :local   => File.join(System.pwd, PIPE_NAME),
-          :project => File.join(System.home, ".#{System.root}#{PIPE_NAME}"),
+          :global  => System.file_join(System.home, PIPE_NAME),
+          :local   => System.file_join(System.pwd, PIPE_NAME),
+          :project => System.file_join(
+            System.home,
+            ".#{System.root}#{PIPE_NAME}"
+          ),
         }
       end
     end

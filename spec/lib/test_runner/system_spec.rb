@@ -42,6 +42,15 @@ describe TestRunner::System do
   describe('.system')  { it_behaves_like 'a delegate to', Kernel, :system }
   describe('.file?')   { it_behaves_like 'a delegate to', File, :file? }
   describe('.exists?') { it_behaves_like 'a delegate to', File, :exists? }
+  describe('.pipe?')   { it_behaves_like 'a delegate to', File, :pipe? }
+
+  describe('.read_file') do
+    it_behaves_like 'a delegate to', File, :read, :read_file
+  end
+
+  describe('.write_file') do
+    it_behaves_like 'a delegate to', File, :write, :write_file
+  end
 
   describe('.open_file') do
     it_behaves_like 'a delegate to', File, :open, :open_file

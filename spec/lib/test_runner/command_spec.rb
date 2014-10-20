@@ -1,12 +1,13 @@
 require 'spec_helper'
 
 describe TestRunner::Command do
+  let(:params) { TestRunner::Params.new args }
   let(:args) { "#{file} #{line}" }
   let(:file) { 'foo.rb' }
   let(:line) { 23 }
 
   describe '.new' do
-    subject { described_class.new args }
+    subject { described_class.new params }
     before { TestRunner::IO.stubs :read_yaml => {} }
     it 'returns a command object' do
       expect(subject).to be_a described_class
@@ -14,7 +15,7 @@ describe TestRunner::Command do
   end
 
   describe '#command' do
-    subject { described_class.new(args).command }
+    subject { described_class.new(params).command }
 
     before { TestRunner::IO.stubs :read_yaml => {} }
 

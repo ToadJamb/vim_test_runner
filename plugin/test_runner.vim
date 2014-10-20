@@ -1,9 +1,9 @@
 " File:        test_runner.vim
 " Author:      Travis Herrick
-" Version:     0.3
+" Version:     0.0.4
 " Description: Send filename and line number to a named pipe
 
-function! l:TriggerFilePath()
+function! s:TriggerFilePath()
   let home = expand('~')
   let pipe_name = '.test_runner'
 
@@ -14,6 +14,7 @@ function! l:TriggerFilePath()
   let project_named_pipe = join([home, '.' . project . pipe_name], '/')
   let local_named_pipe   = join([current_dir, pipe_name], '/')
 
+  "echom strftime('%c')
   "echom project_named_pipe
   "echom local_named_pipe
   "echom global_named_pipe
@@ -31,44 +32,29 @@ function! l:TriggerFilePath()
   return named_pipe
 endfunction
 
-let s:trigger_test_path = l:TriggerFilePath()
+let s:trigger_test_path = s:TriggerFilePath()
 
-function! l:CreatePipeMessage()
+function! s:CreatePipeMessage()
   echom 'Please create a named pipe at ' . s:trigger_test_path
 endfunction
 
-function! l:SendToPipe(args)
+function! s:SendToPipe(args)
   if filereadable(s:trigger_test_path)
-    call writefile(a:args, s:trigger_test_path)
+    call writefile([join(a:args, ' ')], s:trigger_test_path)
   else
-    call l:CreatePipeMessage()
+    call s:CreatePipeMessage()
   endif
 endfunction
 
-function! vim_test_runner:TriggerTest()
+function! TriggerTest()
   let linenum = line('.')
   let fname   = expand('%')
 
-  let args    = [join([fname, linenum], ' ')]
+  let s:args  = [fname, linenum]
 
-  call l:SendToPipe(args)
+  call s:SendToPipe(s:args)
 endfunction
 
-function! vim_test_runner:TriggerPreviousTest()
-  call l:SendToPipe([''])
-endfunction
-
-function! tt:TriggerTest()
-  let message = 'tt:TriggerTest() is being deprecated. '
-  let message = message . 'Please use vim_test_runner:TriggerTest() instead.'
-  echoerr message
-  call vim_test_runner:TriggerTest()
-endfunction
-
-function! tt:TriggerPreviousTest()
-  let message = 'tt:TriggerPreviousTest() is being deprecated. '
-  let message = message .'Please use '
-  let message = message .'vim_test_runner:TriggerPreviousTest() instead.'
-  echoerr message
-  call vim_test_runner:TriggerPreviousTest()
+function! TriggerPreviousTest()
+  call s:SendToPipe(s:args)
 endfunction

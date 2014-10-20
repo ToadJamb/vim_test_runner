@@ -1,6 +1,6 @@
 class TestRunner::Command
-  def initialize(args)
-    @file, @line = args.split
+  def initialize(params)
+    @file, @line = params.file, params.line
     @mask = masks[File.extname(@file)[1..-1]]
     @mask = [@mask] unless @mask.is_a?(Array)
     set_line

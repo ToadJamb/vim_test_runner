@@ -24,6 +24,18 @@ class TestRunner::System
       File.join(*args)
     end
 
+    def pipe?(*args)
+      File.pipe?(*args)
+    end
+
+    def read_file(*args)
+      File.read(*args)
+    end
+
+    def write_file(*args)
+      File.write(*args)
+    end
+
     def home
       @home ||= File.expand_path('~')
     end
