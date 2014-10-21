@@ -7,3 +7,5 @@ TODO
 	* listening
 	* pipe_input
 	* file_input
+* Default ruby format should be [file]:[line].
+* Update rspec (this will likely force the issue with the formatting).
