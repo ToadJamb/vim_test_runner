@@ -10,7 +10,7 @@ module TestRunner
     end
 
     def valid?
-      return @valid if !@valid.nil?
+      return @valid if defined?(@valid) && !@valid.nil?
       @valid = !!file
     end
   end
