@@ -12,7 +12,7 @@ describe TestRunner do
 
   describe '.run' do
     let(:mock_input) { mock 'IO.input' }
-    let(:command)    { "bundle exec rspec #{file} -l #{line}" }
+    let(:command)    { "bundle exec rspec #{file}:#{line}" }
 
     before { mock_input.expects :gets => args }
     before { TestRunner::IO.expects :input => mock_input }

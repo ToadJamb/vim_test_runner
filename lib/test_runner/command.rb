@@ -14,9 +14,9 @@ class TestRunner::Command
 
   def masks
     {
-      'rb'      => ['bundle exec rspec %f %l', '-l %l'],
-      'feature' => ['bundle exec cucumber %f %l -r features', '-l %l'],
-      'lua'     => ['lspec %f %l', '-l %l'],
+      'rb'      => ['bundle exec rspec %f%l', ':%l'],
+      'feature' => ['bundle exec cucumber %f%l -r features', ':%l'],
+      'lua'     => ['lspec %f%l', ':%l'],
     }.merge TestRunner::IO.read_yaml
   end
 

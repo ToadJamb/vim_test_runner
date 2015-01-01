@@ -20,7 +20,7 @@ describe TestRunner::Command do
     before { TestRunner::IO.stubs :read_yaml => {} }
 
     context 'given a ruby file' do
-      let(:command) { "bundle exec rspec #{file} -l #{line}" }
+      let(:command) { "bundle exec rspec #{file}:#{line}" }
 
       before { expect(File.extname(file)).to eq '.rb' }
 
@@ -34,7 +34,7 @@ describe TestRunner::Command do
         before { expect(line).to eq 1 }
 
         it 'does not include the line number' do
-          expect(subject).to_not match(/-l #{line}/)
+          expect(subject).to_not match(/:#{line}/)
         end
       end
 
@@ -52,7 +52,7 @@ describe TestRunner::Command do
     end
 
     context 'given a feature file' do
-      let(:command) { "bundle exec cucumber #{file} -l #{line} -r features" }
+      let(:command) { "bundle exec cucumber #{file}:#{line} -r features" }
       let(:file)    { 'cucumber.feature' }
 
       before { expect(File.extname(file)).to eq '.feature' }
@@ -67,7 +67,7 @@ describe TestRunner::Command do
         before { expect(line).to eq 1 }
 
         it 'does not include the line number' do
-          expect(subject).to_not match(/-l #{line}/)
+          expect(subject).to_not match(/:#{line}/)
         end
       end
 
@@ -85,7 +85,7 @@ describe TestRunner::Command do
     end
 
     context 'given a lua file' do
-      let(:command) { "lspec #{file} -l #{line}" }
+      let(:command) { "lspec #{file}:#{line}" }
       let(:file)    { 'file_spec.lua' }
 
       before { expect(File.extname(file)).to eq '.lua' }
@@ -100,7 +100,7 @@ describe TestRunner::Command do
         before { expect(line).to eq 1 }
 
         it 'does not include the line number' do
-          expect(subject).to_not match(/-l #{line}/)
+          expect(subject).to_not match(/:#{line}/)
         end
       end
 
