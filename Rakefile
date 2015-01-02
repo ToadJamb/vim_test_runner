@@ -1,5 +1,7 @@
-Dir['tasks/**/*.rake'].each do |file|
-  import file
-end
+require 'rake_tasks'
+require 'rake_tasks/tasks/cane'
 
-task :default => ['cane', 'specs']
+task :default => [
+  :cane,
+  :specs,
+]
