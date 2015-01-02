@@ -1,6 +1,6 @@
 " File:        test_runner.vim
 " Author:      Travis Herrick
-" Version:     0.0.4
+" Version:     0.0.5
 " Description: Send filename and line number to a named pipe
 
 function! s:TriggerFilePath()
