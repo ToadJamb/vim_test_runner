@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe TestRunner::Command do
+RSpec.describe TestRunner::Command do
   let(:params) { TestRunner::Params.new args }
   let(:args) { "#{file} #{line}" }
   let(:file) { 'foo.rb' }

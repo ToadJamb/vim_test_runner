@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe TestRunner::Params do
+RSpec.describe TestRunner::Params do
   subject { instance }
 
   let(:instance) { described_class.new arg }

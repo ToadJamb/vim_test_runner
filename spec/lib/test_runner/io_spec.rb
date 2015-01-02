@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe TestRunner::IO do
+RSpec.describe TestRunner::IO do
   System = TestRunner::System
 
   let(:home)        { '/home/path' }

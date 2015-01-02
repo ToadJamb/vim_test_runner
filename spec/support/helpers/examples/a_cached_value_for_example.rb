@@ -1,4 +1,4 @@
-shared_examples_for 'a cached value for' do |klass, method, delegate, var|
+RSpec.shared_examples 'a cached value for' do |klass, method, delegate, var|
   subject { described_class.send delegate }
 
   let(:cache) { 'cached-value' }

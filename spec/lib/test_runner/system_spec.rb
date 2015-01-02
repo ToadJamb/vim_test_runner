@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe TestRunner::System do
-  shared_examples_for 'a delegate to' do |klass, method, delegate|
+RSpec.describe TestRunner::System do
+  shared_examples 'a delegate to' do |klass, method, delegate|
     let(:arg1) { 'abc' }
     let(:arg2) { 'def' }
     let(:arg3) { { :k1 => :v1 } }
