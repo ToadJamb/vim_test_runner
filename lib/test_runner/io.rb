@@ -36,6 +36,8 @@ module TestRunner
         else
           @yaml = {}
         end
+
+        @yaml = master_yaml.merge(@yaml)
       end
 
       # These are thought of as private, but tested directly.
@@ -76,7 +78,6 @@ module TestRunner
       private
 
       def yaml_path
-        default_yaml = '.test_runner.yaml'
         home_yaml = System.file_join(
           System.home, ".#{System.root}#{default_yaml}")
 
@@ -85,6 +86,16 @@ module TestRunner
         elsif System.file?(home_yaml)
           home_yaml
         end
+      end
+
+      def master_yaml
+        path = System.file_join(System.home, default_yaml)
+        return System.load_yaml(path) if System.file?(path)
+        {}
+      end
+
+      def default_yaml
+        '.test_runner.yaml'
       end
 
       def pipes
