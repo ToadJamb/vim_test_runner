@@ -169,62 +169,124 @@ RSpec.describe TestRunner::IO do
     before { described_class.unstub :read_yaml }
 
     context 'given the first invocation' do
-      let(:work_path) { '.test_runner.yaml' }
-      let(:home_path) { File.join home, ".#{root}.test_runner.yaml" }
-      let(:work_yaml) {{ :work => true }}
-      let(:home_yaml) {{ :home => true }}
+      let(:work_path)   { '.test_runner.yaml' }
+      let(:home_path)   { File.join home, ".#{root}.test_runner.yaml" }
+      let(:master_path) { File.join home, ".test_runner.yaml" }
+      let(:work_yaml)   {{ :work => true, :shared => :work }}
+      let(:home_yaml)   {{ :home => true, :shared => :home }}
+      let(:master_yaml) {{ :master => true, :shared => :master }}
 
       before { System.stubs :root => root }
 
       before do
         System.stubs(:load_yaml).with(work_path).returns work_yaml
         System.stubs(:load_yaml).with(home_path).returns home_yaml
+        System.stubs(:load_yaml).with(master_path).returns master_yaml
       end
 
-      context 'given a yaml file in the working folder' do
-        before { System.stubs(:file?).with(work_path).returns true }
+      context 'given no master file' do
+        before { System.stubs(:file?).with(master_path).returns false }
 
-        context 'given a yaml file in the home folder' do
-          before do
-            System.stubs(:file?).with(home_path).returns true
+        context 'given a yaml file in the working folder' do
+          before { System.stubs(:file?).with(work_path).returns true }
+
+          context 'given a yaml file in the home folder' do
+            before do
+              System.stubs(:file?).with(home_path).returns true
+            end
+
+            it 'loads the working folder yaml file' do
+              expect(subject).to eq work_yaml
+            end
           end
 
-          it 'loads the working folder yaml file' do
-            expect(subject).to eq work_yaml
+          context 'given no yaml file in the home folder' do
+            before do
+              System.stubs(:file?).with(home_path).returns false
+            end
+
+            it 'loads the working folder yaml file' do
+              expect(subject).to eq work_yaml
+            end
           end
         end
 
-        context 'given no yaml file in the home folder' do
-          before do
-            System.stubs(:file?).with(home_path).returns false
+        context 'given no yaml file in the working folder' do
+          before { System.stubs(:file?).with(work_path).returns false }
+
+          context 'given a yaml file in the home folder' do
+            before do
+              System.stubs(:file?).with(home_path).returns true
+            end
+
+            it 'loads the home folder yaml file' do
+              expect(subject).to eq home_yaml
+            end
           end
 
-          it 'loads the working folder yaml file' do
-            expect(subject).to eq work_yaml
+          context 'given no yaml file in the home folder' do
+            before do
+              System.stubs(:file?).with(home_path).returns false
+            end
+
+            it 'returns an empty hash' do
+              expect(subject).to eq({})
+            end
           end
         end
       end
 
-      context 'given no yaml file in the working folder' do
-        before { System.stubs(:file?).with(work_path).returns false }
+      context 'given a master file' do
+        before { System.stubs(:file?).with(master_path).returns true }
 
-        context 'given a yaml file in the home folder' do
-          before do
-            System.stubs(:file?).with(home_path).returns true
+        context 'given a yaml file in the working folder' do
+          before { System.stubs(:file?).with(work_path).returns true }
+
+          context 'given a yaml file in the home folder' do
+            before do
+              System.stubs(:file?).with(home_path).returns true
+            end
+
+            it 'loads the master and working folder yaml content' do
+              expect(subject).to include work_yaml
+              expect(subject).to include({:master => true})
+            end
           end
 
-          it 'loads the home folder yaml file' do
-            expect(subject).to eq home_yaml
+          context 'given no yaml file in the home folder' do
+            before do
+              System.stubs(:file?).with(home_path).returns false
+            end
+
+            it 'loads the master and working folder yaml content' do
+              expect(subject).to include work_yaml
+              expect(subject).to include({:master => true})
+            end
           end
         end
 
-        context 'given no yaml file in the home folder' do
-          before do
-            System.stubs(:file?).with(home_path).returns false
+        context 'given no yaml file in the working folder' do
+          before { System.stubs(:file?).with(work_path).returns false }
+
+          context 'given a yaml file in the home folder' do
+            before do
+              System.stubs(:file?).with(home_path).returns true
+            end
+
+            it 'loads the master and home folder yaml file' do
+              expect(subject).to include home_yaml
+              expect(subject).to include({:master => true})
+            end
           end
 
-          it 'returns an empty hash' do
-            expect(subject).to eq({})
+          context 'given no yaml file in the home folder' do
+            before do
+              System.stubs(:file?).with(home_path).returns false
+            end
+
+            it 'loads the master yaml' do
+              expect(subject).to eq master_yaml
+            end
           end
         end
       end
