@@ -27,17 +27,12 @@ module TestRunner
       end
 
       def read_yaml
-        return @yaml if @yaml
-
         yaml_file = yaml_path
 
-        if yaml_file
-          @yaml = System.load_yaml(yaml_file)
-        else
-          @yaml = {}
-        end
+        yaml = {}
+        yaml = System.load_yaml(yaml_file) if yaml_file
 
-        @yaml = master_yaml.merge(@yaml)
+        master_yaml.merge yaml
       end
 
       # These are thought of as private, but tested directly.

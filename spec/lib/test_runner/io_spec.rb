@@ -291,11 +291,6 @@ RSpec.describe TestRunner::IO do
         end
       end
     end
-
-    context 'given it has been invoked previously' do
-      it_behaves_like 'a cached value for',
-        System, :load_yaml, :read_yaml, :yaml
-    end
   end
 
   describe '.pipe' do
