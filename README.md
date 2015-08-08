@@ -136,7 +136,17 @@ overrides the Ruby command and adds one for JavaScript:
 
 ### Yaml location
 
-The yaml file may be created in one of two locations.
+#### Master Yaml File
+
+A master yaml file may be defined at `~/.test_runner.yaml`.
+This file will be used by default with overrides taking priority.
+This gives the user the ability to set sensible defaults
+for their system/configuration.
+
+
+##### Yaml Overrides
+
+The yaml override file may be created in one of two locations.
 
 * The project root. This file is named `.test_runner.yaml`.
 * Your home folder. This file is named
