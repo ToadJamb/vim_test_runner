@@ -5,3 +5,9 @@ rvm:
   - 2.0
   - 1.9.3
   #- 1.8.7 parallel gem requires ruby >= 1.9.3
+branches:
+  only:
+    - master
+    - stable
+    - release
+    - /chore\/fix-ci.*/
