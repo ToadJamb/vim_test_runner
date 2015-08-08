@@ -122,14 +122,14 @@ this in the yaml file:
 
 		rb:
 			- bundle exec rspec %f %l
-			- -l %l
+			- ':%l'
 
 Multiple commands may be included in the yaml file. The following example
 overrides the Ruby command and adds one for JavaScript:
 
 		rb:
 			- bundle exec test %f %l
-			- -l %l
+			- ':%l'
 		js:
 			- npm test
 
