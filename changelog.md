@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.0.7
+-----
+
+* Load the yaml contents on every invocation.
+
+
 0.0.4
 -----
 
