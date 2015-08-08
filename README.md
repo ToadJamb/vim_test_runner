@@ -1,7 +1,7 @@
 VIM TestRunner Plugin
 =====================
 
-[![Build Status](https://travis-ci.org/ToadJamb/vim_test_runner.svg)](https://travis-ci.org/ToadJamb/vim_test_runner)
+[![Build Status](https://travis-ci.org/ToadJamb/vim_test_runner.svg?branch=master)](https://travis-ci.org/ToadJamb/vim_test_runner)
 
 This plugin runs your tests without leaving vim using named pipes.
 The recommended setup is tmux combined with vim so that you can see
