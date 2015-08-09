@@ -21,9 +21,9 @@ module TestRunner
       end
 
       def run(command)
-        puts '-' * 80
+        puts '*' * 80
         puts command
-        puts '-' * 80
+        puts '*' * 80
         System.system command
       end
 
