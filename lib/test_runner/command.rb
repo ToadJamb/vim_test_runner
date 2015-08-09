@@ -16,6 +16,7 @@ class TestRunner::Command
     {
       'rb'      => ['bundle exec rspec %f%l', ':%l'],
       'feature' => ['bundle exec cucumber %f%l -r features', ':%l'],
+      'rake'    => ['bundle exec rake'],
       'lua'     => ['lspec %f%l', ':%l'],
     }.merge TestRunner::IO.read_yaml
   end

@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.0.8
+-----
+
+* Add a default command for rake files.
+
+
 0.0.7
 -----
 
