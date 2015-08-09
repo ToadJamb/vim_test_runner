@@ -37,11 +37,11 @@ module TestRunner
     def merge_yamls(yamls)
       hash = {}
 
-      puts '*' * 80
+      puts '-' * 80
       message  = 'The yaml files are merged in the following order '
       message += '(bottom files take precedence):'
       puts message
-      puts '-' * 80
+      puts
 
       yamls.each do |yaml|
         puts yaml.path
