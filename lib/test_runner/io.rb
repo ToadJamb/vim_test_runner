@@ -21,18 +21,14 @@ module TestRunner
       end
 
       def run(command)
-        puts '*' * 80
+        puts '-' * 80
         puts command
+        puts '-' * 80
         System.system command
       end
 
       def read_yaml
-        yaml_file = yaml_path
-
-        yaml = {}
-        yaml = System.load_yaml(yaml_file) if yaml_file
-
-        master_yaml.merge yaml
+        Yaml.new.to_hash
       end
 
       # These are thought of as private, but tested directly.
@@ -71,27 +67,6 @@ module TestRunner
       end
 
       private
-
-      def yaml_path
-        home_yaml = System.file_join(
-          System.home, ".#{System.root}#{default_yaml}")
-
-        if System.file?(default_yaml)
-          default_yaml
-        elsif System.file?(home_yaml)
-          home_yaml
-        end
-      end
-
-      def master_yaml
-        path = System.file_join(System.home, default_yaml)
-        return System.load_yaml(path) if System.file?(path)
-        {}
-      end
-
-      def default_yaml
-        '.test_runner.yaml'
-      end
 
       def pipes
         {

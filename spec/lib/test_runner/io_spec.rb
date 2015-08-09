@@ -247,8 +247,8 @@ RSpec.describe TestRunner::IO do
               System.stubs(:file?).with(home_path).returns true
             end
 
-            it 'loads the master and working folder yaml content' do
-              expect(subject).to include work_yaml
+            it 'loads the master and home folder yaml content' do
+              expect(subject).to include home_yaml
               expect(subject).to include({:master => true})
             end
           end
