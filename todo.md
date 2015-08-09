@@ -1,7 +1,6 @@
 TODO
 ====
 
-* Show the yaml files being read.
 * Create a class for the following public methods that are considered private:
 	* pipe
 	* pipe?

@@ -5,6 +5,8 @@ Changelog
 -----
 
 * Add a default command for rake files.
+* Show the yaml files being read (in order of precedence - files at the bottom overwrite settings above them).
+* All yaml files are now evaluated and used.
 
 
 0.0.7

@@ -156,6 +156,11 @@ As an example, if your project is located at `/root/path/my_project` and you
 wanted to use a yaml file in your home folder,
 it would be named `.my_project.test_runner.yaml`.
 
+Technically, you can have both,
+with the home project yaml file taking precedence.
+This is to allow users a defense against someone
+checking in the project-level yaml file (which is strongly discouraged).
+
 
 Notes
 -----
